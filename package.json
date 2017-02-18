@@ -1,0 +1,11 @@
+{
+  "name": "trie",
+  "version": "1.0.0",
+  "description": "javascript trie implementation with no dependencies",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test.js"
+  },
+  "author": "Eric Foard",
+  "license": "ISC"
+}
