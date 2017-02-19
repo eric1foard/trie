@@ -50,17 +50,39 @@ class Trie {
     }
     return currNode.value;
   }
-}
 
-let t = new Trie();
-console.log(t);
-t.insert('wow', 7);
-t.insert('whw', 3);
-t.insert('zgb', 1);
-console.log(JSON.stringify(t.root, null, 2));
-console.log('searching...', t.search('wow'));
-console.log('searching...', t.search('hey'));
-console.log('searching...', t.search('whw'));
-console.log('searching...', t.search('w'));
+  // return true if deletion successful, false otherwise
+  remove(str) {
+    if (typeof str !== 'string') {
+      return new Error(`remove key must be a string: ${str}`);
+    }
+    if (!str.length) return false;
+
+    let currNode = this.root;
+    let nodes = [];
+    let char, child;
+
+    for (let i=0; i<str.length; i++) {
+      char = str.charAt(i);
+      child = currNode.children[char];
+      if (!child) {
+        return false;
+      }
+      nodes.push(child);
+      currNode = child;
+    }
+
+    for (let i=nodes.length-1; i>=0; i--) {
+      if (Object.keys(nodes[i].children).length) {
+        // will return false on first iteration (nothing could be deleted), else true
+        return i !== nodes.length-1;
+      }
+      console.log('deleting node');
+      char = nodes[i].key;
+      delete (nodes[i-1] || this.root).children[char];
+    }
+    return true;
+  }
+}
 
 module.exports = Trie;

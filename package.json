@@ -4,8 +4,11 @@
   "description": "javascript trie implementation with no dependencies",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test.js"
+    "test": "mocha test/test.js"
   },
   "author": "Eric Foard",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^3.5.0"
+  }
 }
