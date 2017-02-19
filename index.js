@@ -27,6 +27,8 @@ class Trie {
       if (!child) {
         child = new Node(char, isLeaf ? value : null);
         currNode.children[char] = child;
+      } else if (isLeaf) {
+        child.value = value;
       }
       currNode = child;
     }
@@ -84,5 +86,16 @@ class Trie {
     return true;
   }
 }
+
+/*
+let startTime = Date.now();
+let t = new Trie();
+for (var i = 0; i < 1000; i++) {
+  t.insert(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5));
+}
+console.log(t);
+let endTime = Date.now();
+console.log(`time: ${endTime - startTime}`);
+*/
 
 module.exports = Trie;
