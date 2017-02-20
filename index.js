@@ -10,7 +10,7 @@ class Node {
 
 class Trie {
   constructor() {
-  this.root = new Node('', null);
+    this.root = new Node('', null);
   }
 
   insert(str, value) {
@@ -68,7 +68,7 @@ class Trie {
       char = str.charAt(i);
       child = currNode.children[char];
       if (!child) {
-        return false;
+        return true; // tried to remove non-existent string; successful by default
       }
       nodes.push(child);
       currNode = child;
@@ -76,12 +76,16 @@ class Trie {
 
     for (let i=nodes.length-1; i>=0; i--) {
       if (Object.keys(nodes[i].children).length) {
-        // will return false on first iteration (nothing could be deleted), else true
-        return i !== nodes.length-1;
+        if (i === nodes.length-1) {
+          nodes[i].value = null;
+        }
+        return true;
       }
-      console.log('deleting node');
-      char = nodes[i].key;
-      delete (nodes[i-1] || this.root).children[char];
+      // only delete node if terminating char of removal target or empty node w/ no children
+      if (i === nodes.length-1 || nodes[i].value === null) {
+        char = nodes[i].key;
+        delete (nodes[i-1] || this.root).children[char];
+      }
     }
     return true;
   }
@@ -91,7 +95,7 @@ class Trie {
 let startTime = Date.now();
 let t = new Trie();
 for (var i = 0; i < 1000; i++) {
-  t.insert(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5));
+t.insert(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10));
 }
 console.log(t);
 let endTime = Date.now();

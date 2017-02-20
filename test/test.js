@@ -62,37 +62,94 @@ describe('when inserting elements into the trie', () => {
       expect(t).to.eql(require('./trie-states/insert-into-empty-trie')());
     });
   });
-
-
-  // describe('when searching for elements in the trie', () => {
-  //   let t;
-  //   beforeEach(() => {
-  //     t = new Trie();
-  //     t.insert('wow', 3);
-  //     t.insert('Vancouver', 12);
-  //     t.insert('whales', 4);
-  //     t.insert('whatever', 20);
-  //   });
-  // it('should throw an error if search target is not a string', () => {
-  //
-  // });
-  // it('should return null if search string is empty string', () => {
-  //
-  // });
-  // it('should return false if search target does not exist in tree', () => {
-  //
-  // });
-  // it('should return value at if target found & target includes leaf node', () => {
-  //
-  // });
-  // it('should return null at if target found & target DOES NOT include leaf node', () => {
-  //
-  // });
 });
-/*
+
+describe('when searching for elements in the trie', () => {
+  let t;
+  before(() => {
+    t = new Trie();
+    t.insert('wow', 3);
+    t.insert('vancouver', 12);
+    t.insert('whales', 4);
+    t.insert('whatever', 20);
+    t.insert('what', 'my-cool-value');
+  });
+  it('should throw an error if search target is not a string', () => {
+    let search = t.search(3);
+    expect(search).to.be.an('error');
+  });
+  it('should return null if search string is empty string', () => {
+    let search = t.search('');
+    expect(search).to.be.a('null');
+  });
+  it('should return false if search target does not exist in tree', () => {
+    let search = t.search('i-am-not-in-the-trie');
+    expect(search).to.equal(false);
+  });
+  it('should return value if target found & target includes leaf node', () => {
+    let search = t.search('vancouver');
+    expect(search).to.equal(12);
+  });
+  it('should return null if target found & target DOES NOT include leaf node', () => {
+    let search = t.search('what');
+    expect(search).to.equal('my-cool-value');
+  });
+});
+
 describe('when removing elements from the trie', () => {
-it('should throw an error if removal target is not a string', () => {
-
+  let t, compareTrie;
+  beforeEach(() => {
+    t = new Trie();
+    t.insert('wow', 3);
+    t.insert('vancouver', 12);
+    t.insert('whales', 4);
+    t.insert('whatever', 20);
+    t.insert('what', 'my-cool-value');
+    compareTrie = require('./trie-states/test-remove')();
+  });
+  it('should throw an error if removal target is not a string', () => {
+    let removalResult = t.remove(3);
+    expect(removalResult).to.be.an('error');
+    expect(t).to.eql(compareTrie);
+  });
+  it('should return true if remove is called with key that does not exist in trie', () => {
+    let removalResult = t.remove('I am not in the trie');
+    expect(removalResult).to.equal(true);
+    expect(t).to.eql(compareTrie);
+  });
+  it('should return false if try to remove root', () => {
+    let removalResult = t.remove('');
+    expect(removalResult).to.equal(false);
+    expect(t).to.eql(compareTrie);
+  });
+  describe('and removal key exists in the trie', () => {
+    describe('and key terminates in a leaf', () => {
+      it('and key shares NO nodes with another key, should return true & modify tree correctly', () => {
+        let removalResult = t.remove('vancouver');
+        expect(removalResult).to.equal(true);
+        delete compareTrie.root.children.v;
+        expect(t).to.eql(compareTrie);
+      });
+      it('and key shares nodes with another key, should return true & modify tree correctly', () => {
+        let removalResult = t.remove('whales');
+        expect(removalResult).to.equal(true);
+        delete compareTrie.root.children.w.children.h.children.a.children.l;
+        expect(t).to.eql(compareTrie);
+      });
+      it('and key has another key as its prefix, should return true & modify tree correctly', () => {
+        let removalResult = t.remove('whatever');
+        expect(removalResult).to.equal(true);
+        compareTrie.root.children.w.children.h.children.a.children.t.children = {};
+        expect(t).to.eql(compareTrie);
+      });
+    });
+    describe('and key does NOT terminate in a leaf (i.e. is prefix of another key)', () => {
+      it('should return true & modify tree correctly', () => {
+        let removalResult = t.remove('what');
+        expect(removalResult).to.equal(true);
+        compareTrie.root.children.w.children.h.children.a.children.t.value = null;
+        expect(t).to.eql(compareTrie);
+      });
+    });
+  });
 });
-});
-*/
