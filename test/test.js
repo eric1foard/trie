@@ -124,12 +124,17 @@ describe('when searching for keys in tree by prefix', () => {
       });
     });
     describe('and key does not terminate in leaf node', () => {
-      it.only('should return all results in subtree when search key matches key in tree', () => {
+      it('should return all results in subtree when search key matches key in tree', () => {
         let searchByPrefix = t.searchByPrefix('w');
-        console.log(JSON.stringify(searchByPrefix));
+        expect(searchByPrefix.sort()).to.eql([20,3,4,'my-cool-value']);
       });
-      // it('should return all results in subtree when search key does not match key in tree', => {
-      // });
+      it('should return all results in subtree when search key is not a key in the tree',() => {
+        t.insert('wowee', 1);
+        t.insert('wowzer', 2);
+        t.insert('wowwowweewow', 4);
+        let searchByPrefix = t.searchByPrefix('wow');
+        expect(searchByPrefix.sort()).to.eql([1,2,3,4]);
+      });
     });
   });
 });

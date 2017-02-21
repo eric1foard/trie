@@ -82,7 +82,7 @@ class Trie {
     if (Object.keys(node.children).length === 0) {
       return node;
     }
-    return _searchSubtree(node, []);
+    return _searchSubtree(node, node.value === null ? [] : [node.value]);
   }
 
   remove(str) {
