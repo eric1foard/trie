@@ -9,16 +9,21 @@ class Node {
 }
 
 const _searchSubtree = (node, arr) => {
-  let value;
+  let value, result;
   let children = Object.keys(node.children);
-  if (children.length === 0) return arr;
-  return children.length ? children.forEach((key) => {
+  if (children.length === 0) {
+    return arr;
+  };
+  children.forEach((key) => {
     value = node.children[key].value;
     if (value !== null) {
       arr.push(value);
-      return _searchSubtree(node.children[key], arr);
+    }
+    if (Object.keys(node.children[key].children).length) {
+        return _searchSubtree(node.children[key], arr);
     }
   });
+  return arr;
 };
 
 class Trie {
@@ -116,16 +121,5 @@ class Trie {
     return true;
   }
 }
-
-/*
-let startTime = Date.now();
-let t = new Trie();
-for (var i = 0; i < 1000; i++) {
-t.insert(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10));
-}
-console.log(t);
-let endTime = Date.now();
-console.log(`time: ${endTime - startTime}`);
-*/
 
 module.exports = Trie;

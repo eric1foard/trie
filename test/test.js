@@ -123,12 +123,14 @@ describe('when searching for keys in tree by prefix', () => {
         expect(searchByPrefix).to.eql({key: 'r', value: 12, children: {}});
       });
     });
-    // describe('and key does not terminate in leaf node', () => {
-    //   it('should return all results in subtree when search key matches key in tree', () => {
-    //   });
-    //   it('should return all results in subtree when search key does not match key in tree', => {
-    //   });
-    // });
+    describe('and key does not terminate in leaf node', () => {
+      it.only('should return all results in subtree when search key matches key in tree', () => {
+        let searchByPrefix = t.searchByPrefix('w');
+        console.log(JSON.stringify(searchByPrefix));
+      });
+      // it('should return all results in subtree when search key does not match key in tree', => {
+      // });
+    });
   });
 });
 
