@@ -1,6 +1,16 @@
 const expect = require('chai').expect;
 const Trie = require('./../index');
 
+const setupTrie = () => {
+  let t = new Trie();
+  t.insert('wow', 3);
+  t.insert('vancouver', 12);
+  t.insert('whales', 4);
+  t.insert('whatever', 20);
+  t.insert('what', 'my-cool-value');
+  return t;
+};
+
 describe('when constructing a new trie', () => {
   it('should create a root node with enmpty string as key & null value', () => {
     let t = new Trie();
@@ -64,15 +74,10 @@ describe('when inserting elements into the trie', () => {
   });
 });
 
-describe('when searching for elements in the trie', () => {
+describe('when searching for exact matching key in the trie', () => {
   let t;
   before(() => {
-    t = new Trie();
-    t.insert('wow', 3);
-    t.insert('vancouver', 12);
-    t.insert('whales', 4);
-    t.insert('whatever', 20);
-    t.insert('what', 'my-cool-value');
+    t = setupTrie();
   });
   it('should throw an error if search target is not a string', () => {
     let search = t.search(3);
@@ -80,7 +85,7 @@ describe('when searching for elements in the trie', () => {
   });
   it('should return null if search string is empty string', () => {
     let search = t.search('');
-    expect(search).to.be.a('null');
+    expect(search.value).to.be.a('null');
   });
   it('should return false if search target does not exist in tree', () => {
     let search = t.search('i-am-not-in-the-trie');
@@ -88,23 +93,49 @@ describe('when searching for elements in the trie', () => {
   });
   it('should return value if target found & target includes leaf node', () => {
     let search = t.search('vancouver');
-    expect(search).to.equal(12);
+    expect(search).to.eql({key: 'r', value: 12, children: {}});
   });
   it('should return null if target found & target DOES NOT include leaf node', () => {
     let search = t.search('what');
-    expect(search).to.equal('my-cool-value');
+    expect(search).to.eql(t.root.children.w.children.h.children.a.children.t);
+  });
+});
+
+describe('when searching for keys in tree by prefix', () => {
+  let t;
+  beforeEach(() => {
+    t = setupTrie();
+  });
+  it('should throw an error if search target is not a string', () => {
+    let searchByPrefix = t.searchByPrefix(3);
+  });
+  // it('should return all keys in trie if search string is empty string', () => {
+  //
+  // });
+  it('should return false if search target does not exist in tree', () => {
+    let searchByPrefix = t.searchByPrefix('banana');
+    expect(searchByPrefix).to.equal(false);
+  });
+  describe('and search results exist', () => {
+    describe('and key terminates in leaf node', () => {
+      it('should return single result', () => {
+        let searchByPrefix = t.searchByPrefix('vancouver');
+        expect(searchByPrefix).to.eql({key: 'r', value: 12, children: {}});
+      });
+    });
+    // describe('and key does not terminate in leaf node', () => {
+    //   it('should return all results in subtree when search key matches key in tree', () => {
+    //   });
+    //   it('should return all results in subtree when search key does not match key in tree', => {
+    //   });
+    // });
   });
 });
 
 describe('when removing elements from the trie', () => {
   let t, compareTrie;
   beforeEach(() => {
-    t = new Trie();
-    t.insert('wow', 3);
-    t.insert('vancouver', 12);
-    t.insert('whales', 4);
-    t.insert('whatever', 20);
-    t.insert('what', 'my-cool-value');
+    t = setupTrie();
     compareTrie = require('./trie-states/test-remove')();
   });
   it('should throw an error if removal target is not a string', () => {

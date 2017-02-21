@@ -8,6 +8,19 @@ class Node {
   }
 }
 
+const _searchSubtree = (node, arr) => {
+  let value;
+  let children = Object.keys(node.children);
+  if (children.length === 0) return arr;
+  return children.length ? children.forEach((key) => {
+    value = node.children[key].value;
+    if (value !== null) {
+      arr.push(value);
+      return _searchSubtree(node.children[key], arr);
+    }
+  });
+};
+
 class Trie {
   constructor() {
     this.root = new Node('', null);
@@ -50,10 +63,23 @@ class Trie {
       }
       currNode = child;
     }
-    return currNode.value;
+    return currNode;
   }
 
-  // return true if deletion successful, false otherwise
+  searchByPrefix(str) {
+    if (typeof str !== 'string') {
+      return new Error(`search key must be a string: ${str}`);
+    }
+    let node = this.search(str);
+    if (!node) {
+      return false;
+    }
+    if (Object.keys(node.children).length === 0) {
+      return node;
+    }
+    return _searchSubtree(node, []);
+  }
+
   remove(str) {
     if (typeof str !== 'string') {
       return new Error(`remove key must be a string: ${str}`);
