@@ -109,9 +109,10 @@ describe('when searching for keys in tree by prefix', () => {
   it('should throw an error if search target is not a string', () => {
     let searchByPrefix = t.searchByPrefix(3);
   });
-  // it('should return all keys in trie if search string is empty string', () => {
-  //
-  // });
+  it('should return all keys in trie if search string is empty string', () => {
+    let searchByPrefix = t.searchByPrefix('');
+    expect(searchByPrefix.sort()).to.eql([12, 20, 3, 4, 'my-cool-value']);
+  });
   it('should return false if search target does not exist in tree', () => {
     let searchByPrefix = t.searchByPrefix('banana');
     expect(searchByPrefix).to.equal(false);
