@@ -122,4 +122,7 @@ class Trie {
   }
 }
 
-module.exports = Trie;
+// this module is designed for for use in a chrome extension, so may not be run in node
+if (module && module.exports) {
+  module.exports = Trie;
+}
