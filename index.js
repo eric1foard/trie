@@ -80,7 +80,7 @@ class Trie {
       return false;
     }
     if (Object.keys(node.children).length === 0) {
-      return [node];
+      return [node.value];
     }
     return _searchSubtree(node, node.value === null ? [] : [node.value]);
   }
