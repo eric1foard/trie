@@ -121,7 +121,9 @@ describe('when searching for keys in tree by prefix', () => {
     describe('and key terminates in leaf node', () => {
       it('should return single result', () => {
         let searchByPrefix = t.searchByPrefix('vancouver');
-        expect(searchByPrefix).to.eql({key: 'r', value: 12, children: {}});
+        expect(searchByPrefix).to.be.an('array');
+        expect(searchByPrefix.length).to.equal(1);
+        expect(searchByPrefix[0]).to.eql({key: 'r', value: 12, children: {}});
       });
     });
     describe('and key does not terminate in leaf node', () => {
