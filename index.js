@@ -36,16 +36,16 @@ class Trie {
       return new Error(`insert key must be a string: ${str}`);
     }
     let currNode = this.root;
-    let char, child, isLeaf;
+    let char, child, isLastChar;
 
     for (let i=0; i<str.length; i++) {
       char = str.charAt(i);
       child = currNode.children[char];
-      isLeaf = i === str.length - 1;
+      isLastChar = i === str.length - 1;
       if (!child) {
-        child = new Node(char, isLeaf ? value : null);
+        child = new Node(char, isLastChar ? value : null);
         currNode.children[char] = child;
-      } else if (isLeaf) {
+      } else if (isLastChar) {
         child.value = value;
       }
       currNode = child;
