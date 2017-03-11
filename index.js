@@ -43,10 +43,10 @@ class Trie {
       child = currNode.children[char];
       isLastChar = i === str.length - 1;
       if (!child) {
-        child = new Node(char, isLastChar ? value : null);
+        child = new Node(char, isLastChar ? [value] : null);
         currNode.children[char] = child;
       } else if (isLastChar) {
-        child.value = value;
+        child.value = child.value ? child.value.conact(value) : [value];
       }
       currNode = child;
     }
